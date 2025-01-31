@@ -9,12 +9,13 @@ def echo(input_string):
     print(input_string)
 
 class EchoRequest(BaseModel):
-    message: str
+    inputs: dict
 
 @app.post("/echo")
 def echo_endpoint(request: EchoRequest):
-    echo(request.message)
-    return {"echoed_message": request.message}
+    msg = request.inputs.get("input", "No había nada!")
+    echo(msg)
+    return {"outcome": msg}
 
 if __name__ == "__main__":
     import uvicorn

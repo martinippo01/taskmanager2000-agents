@@ -39,5 +39,5 @@ def prepare_post(url, name, param_names, param_types, param_optionals, kafka_inf
     headers = {
         'Content-Type': 'application/json',
     }
-    post_with_retry(url, payload, headers, 10, 3)
+    return post_with_retry(url, payload, headers, 10, 3)
     
