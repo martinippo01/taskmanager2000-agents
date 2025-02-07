@@ -73,8 +73,12 @@ if prepare_post(TASK_SERVICE_URL, TASK_NAME, PARAM_NAMES, PARAM_TYPES, PARAM_OPT
 
 def save_to_nfs(message, path_to_nfs: str):
     try:
+        # Esto crea el directorio si no existe
+        os.makedirs(os.path.dirname(path_to_nfs), exist_ok=True)
+
         with open(path_to_nfs, "a") as file:
             file.write(f"{message}\n")
+
         logging.info(f"Message successfully saved to NFS: {path_to_nfs}")
     except Exception as e:
         logging.error(f"Failed to write to NFS: {e}")
