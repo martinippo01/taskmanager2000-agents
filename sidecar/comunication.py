@@ -1,6 +1,6 @@
 # Configuration
 import os
-from fastapi import requests
+from fastapi import requests # quizas esto deba ser import requests
 from kafka import KafkaConsumer, KafkaProducer
 import logging
 import json
@@ -103,17 +103,18 @@ for message in consumer:
     # Los mensajes que llegues van a tener la siguiente pinta:
     # workflowExecutionId: string; name: string; inputArgs: InputArguments;
     try:
-        logging.log(f"Received message from Kafka: {message}")
+        logging.info(f"Received message from Kafka: {message}")
         data = message.value  # This is already a dictionary due to value_deserializer
         workflow_execution_id = data.get("workflowExecutionId")
         name = data.get("name")
         inputArgs = data.get("inputArgs")
         response = requests.post(AGENT_URL, json={"inputs": inputArgs})
         response.raise_for_status()
-        logging.log(f"Successfully sent message to agent: {response.json()}")
+        logging.info(f"Successfully sent message to agent: {response.json()}")
         # response debe tener un campo llamado "outcome"
-        path_save_in_nfs = NFS_PATH+"/{workflow_execution_id}/{name}"
-        save_to_nfs(response.get("outcome"), path_save_in_nfs)
+        path_save_in_nfs = f"{NFS_PATH}/{workflow_execution_id}/{name}"
+        response_json = response.json()
+        save_to_nfs(response_json.get("outcome", ""), path_save_in_nfs)
         send_response_to_kafka(workflow_execution_id, path_save_in_nfs)
     except Exception as e:
         logging.error("Failed to process message: {e}")
