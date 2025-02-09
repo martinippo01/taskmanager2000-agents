@@ -45,7 +45,6 @@ consumer = KafkaConsumer(
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='sidecar-group',
-    # TODO: Revisar que esto tenga sentido
     security_protocol='SASL_PLAINTEXT',
     sasl_mechanism='PLAIN',
     sasl_plain_username=USERNAME,
@@ -58,6 +57,8 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8') 
 )
 
+
+# TODO: Ojo necesito mandar el broker productor y quedarme con el consumidor
 kafka_info = {
     "broker": KAFKA_BROKERS,
     "topic": KAFKA_AGENT_TOPIC,
