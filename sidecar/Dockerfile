@@ -15,6 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Al parecer este no hace falta, cuando usas kubernetes no cambia nada
+EXPOSE 8500
 
 # Command to run the application
 CMD ["python", "sidecar.py"]

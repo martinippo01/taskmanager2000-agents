@@ -28,12 +28,11 @@ def post_with_retry(url, payload, headers, max_retries=10, retry_delay=5):
     return None
 
 
-def prepare_post(url, name, param_names, param_types, param_optionals, kafka_info):
+def prepare_post(url, param_names, param_types, param_optionals, kafka_info):
     payload = {
-        "task_name": name,
-        "kafka_info": kafka_info,
-        "param_names": {param: param_type for param, param_type in zip(param_names, param_types)},
-        "param_optionals": param_optionals
+        "kafkaData": kafka_info,
+        "params": {param: param_type for param, param_type in zip(param_names, param_types)},
+        "optionalParams": param_optionals
     }
     logging.log(json.dumps(payload, indent=4))
     headers = {

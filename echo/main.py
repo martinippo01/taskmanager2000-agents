@@ -19,5 +19,5 @@ def echo_endpoint(request: EchoRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host=os.getenv("AGENT_IP", "0.0.0.0"), port=os.getenv("AGENT_PORT", "8000"))
+    uvicorn.run(app, host="0.0.0.0", port=os.getenv("AGENT_PORT", "8000"))
 
