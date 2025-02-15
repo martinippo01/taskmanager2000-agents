@@ -9,15 +9,21 @@ def echo(input_string):
     print(input_string)
 
 class EchoRequest(BaseModel):
-    inputs: dict
+    input: str
 
 @app.post("/echo")
 def echo_endpoint(request: EchoRequest):
-    msg = request.inputs.get("input", "No había nada!")
+    msg = request.input
+    if not msg:
+        msg = "Nothing to echo"
     echo(msg)
     return {"outcome": msg}
 
+@app.get("/ping")
+def ping():
+    return {"ping": "pong"}
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=os.getenv("AGENT_PORT", "8000"))
+    uvicorn.run(app, host=os.getenv("AGENT_IP", "0.0.0.0"), port=int(os.getenv("AGENT_PORT", "8000")))
 
