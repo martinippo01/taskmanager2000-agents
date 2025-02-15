@@ -18,6 +18,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code into the container
 COPY . .
 
+# Set environment variables
+ENV AWS_ACCESS_KEY="AKIA47R274ALI7GMXTMF"
+ENV AWS_SECRET_KEY="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"
+ENV AWS_BUCKET_NAME="ippo-taskmanager2000-test"
+ENV AWS_REGION="us-east-1"
+
+# Expose port 8000
+EXPOSE 8000
 
 # Command to run the FastAPI application
 CMD ["python", "main.py"]

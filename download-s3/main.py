@@ -71,6 +71,10 @@ async def download_file_from_s3(request: Request):
         logging.error(f"Unexpected error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
+@app.get("/ping")
+def ping():
+    return {"ping": "pong"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
