@@ -46,6 +46,10 @@ async def upload_file_to_s3(file: UploadFile = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
+@app.get("/ping")
+def ping():
+    return {"ping": "pong"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
