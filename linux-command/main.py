@@ -18,6 +18,10 @@ def execute_command(request: CommandRequest):
     except Exception as e:
         return {"error": str(e)}
 
+@app.get("/ping")
+def ping():
+    return {"ping": "pong"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host=os.getenv("AGENT_IP", "0.0.0.0"), port=int(os.getenv("AGENT_PORT", "8000")))
