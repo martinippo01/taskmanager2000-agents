@@ -2,7 +2,6 @@ spec:
   inputs:
     image-prefix:
       type: string
-      default: "taskmanager2000-agent"
     service:
       type: string
 
