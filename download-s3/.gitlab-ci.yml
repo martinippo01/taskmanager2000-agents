@@ -2,6 +2,4 @@ include:
   - local: '.gitlab-ci-template.yml'
     inputs:
       image-prefix: "taskmanager2000-agent"
-      docker-username: $DOCKER_USERNAME
-      docker-password: $DOCKER_PASSWORD
       service: "download-s3"
