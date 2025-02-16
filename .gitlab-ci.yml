@@ -1,0 +1,31 @@
+variables:
+  IMAGE_PREFIX: "taskmanager2000-agent"
+  DOCKER_DRIVER: overlay2 # Optimized storage driver for GitLab CI
+
+stages:
+  - build
+  - push
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - apt-get update && apt-get install -y tar
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+
+build_and_push:
+  stage: build
+  script:
+    - |
+      for service in download-s3 echo linux-command sidecar upload-s3; do
+      echo "Building $service...";
+      cd $service;
+      tar -czh . | docker build - -t $DOCKER_USERNAME/$IMAGE_PREFIX-$service:latest;
+      docker tag $DOCKER_USERNAME/$IMAGE_PREFIX-$service:latest $DOCKER_USERNAME/$IMAGE_PREFIX-$service:$CI_COMMIT_SHORT_SHA;
+      echo "Pushing $service...";
+      docker push $DOCKER_USERNAME/$IMAGE_PREFIX-$service:latest;
+      docker push $DOCKER_USERNAME/$IMAGE_PREFIX-$service:$CI_COMMIT_SHORT_SHA;
+      cd ..;
+      done
