@@ -29,7 +29,6 @@ test-echo:
         - download-s3/**/*
     - if: '$CI_COMMIT_BRANCH == "main"'
 
-
 test-linux-command:
   stage: test
   script:
@@ -38,7 +37,6 @@ test-linux-command:
     - changes:
         - download-s3/**/*
     - if: '$CI_COMMIT_BRANCH == "main"'
-
 
 test-sidecar:
   stage: test
@@ -79,7 +77,6 @@ build-echo:
         - echo/**/*
     - if: '$CI_COMMIT_BRANCH == "main"'
 
-
 build-linux-command:
   stage: build
   trigger:
@@ -89,7 +86,6 @@ build-linux-command:
     - changes:
         - linux-command/**/*
     - if: '$CI_COMMIT_BRANCH == "main"'
-
 
 build-sidecar:
   stage: build
