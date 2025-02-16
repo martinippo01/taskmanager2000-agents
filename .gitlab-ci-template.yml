@@ -1,0 +1,40 @@
+spec:
+  inputs:
+    image-prefix:
+      type: string
+      default: "taskmanager2000-agent"
+    docker-username:
+      type: string
+    docker-password:
+      type: string
+    service:
+      type: string
+
+variables:
+  DOCKER_DRIVER: overlay2 # Optimized storage driver for GitLab CI
+  IMAGE_NAME: $[[ inputs.docker-username ]]/$[[ inputs.image-prefix ]]-$[[ inputs.service ]]
+
+stages:
+  - to_docker_hub
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - apt-get update && apt-get install -y tar
+  - docker login -u "$[[ inputs.docker-username ]]" -p "$[[ inputs.docker-password ]]"
+
+build_and_push:
+  stage: to_docker_hub
+  script:
+    - |
+      echo "Building $[[ inputs.service ]]...";
+      cd $[[ inputs.service ]];
+      tar -czh . | docker build - -t $IMAGE_NAME:latest;
+      docker tag $IMAGE_NAME:latest $IMAGE_NAME:$CI_COMMIT_SHORT_SHA;
+      echo "Pushing $[[ inputs.service ]]...";
+      docker push $IMAGE_NAME:latest;
+      docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA;
+      cd ..;

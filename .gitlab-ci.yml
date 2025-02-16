@@ -1,31 +1,121 @@
-variables:
-  IMAGE_PREFIX: "taskmanager2000-agent"
-  DOCKER_DRIVER: overlay2 # Optimized storage driver for GitLab CI
-
 stages:
+  - test
   - build
-  - push
 
-image: docker:latest
-
-services:
-  - docker:dind
-
-before_script:
-  - apt-get update && apt-get install -y tar
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-
-build_and_push:
-  stage: build
+test-job:
+  stage: test
   script:
-    - |
-      for service in download-s3 echo linux-command sidecar upload-s3; do
-      echo "Building $service...";
-      cd $service;
-      tar -czh . | docker build - -t $DOCKER_USERNAME/$IMAGE_PREFIX-$service:latest;
-      docker tag $DOCKER_USERNAME/$IMAGE_PREFIX-$service:latest $DOCKER_USERNAME/$IMAGE_PREFIX-$service:$CI_COMMIT_SHORT_SHA;
-      echo "Pushing $service...";
-      docker push $DOCKER_USERNAME/$IMAGE_PREFIX-$service:latest;
-      docker push $DOCKER_USERNAME/$IMAGE_PREFIX-$service:$CI_COMMIT_SHORT_SHA;
-      cd ..;
-      done
+    - echo "Testing the project..."
+  rules:
+    - changes:
+        - download-s3/**/*
+  only:
+    - main
+
+test-download-s3:
+  stage: test
+  script:
+    - echo "Testing the project..."
+  rules:
+    - changes:
+        - download-s3/**/*
+  only:
+    - main
+
+test-upload-s3:
+  stage: test
+  script:
+  rules:
+    - changes:
+        - download-s3/**/*
+  only:
+    - main
+
+test-echo:
+  stage: test
+  script:
+    - echo "Testing the project..."
+  rules:
+    - changes:
+        - download-s3/**/*
+  only:
+    - main
+
+
+test-linux-command:
+  stage: test
+  script:
+    - echo "Testing the project..."
+  rules:
+    - changes:
+        - download-s3/**/*
+  only:
+    - main
+
+
+test-sidecar:
+  stage: test
+  script:
+    - echo "Testing the project..."
+  rules:
+    - changes:
+        - download-s3/**/*
+  only:
+    - main
+
+build-download-s3:
+  stage: build
+  trigger:
+    include: download-s3/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+        - download-s3/**/*
+  only:
+    - main
+
+build-upload-s3:
+  stage: build
+  trigger:
+    include: upload-s3/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+        - upload-s3/**/*
+  only:
+    - main
+
+build-echo:
+  stage: build
+  trigger:
+    include: echo/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+        - echo/**/*
+  only:
+    - main
+
+
+build-linux-command:
+  stage: build
+  trigger:
+    include: linux-command/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+        - linux-command/**/*
+  only:
+    - main
+
+
+build-sidecar:
+  stage: build
+  trigger:
+    include: sidecar/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+        - sidecar/**/*
+  only:
+    - main
