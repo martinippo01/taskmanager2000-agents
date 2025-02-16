@@ -2,20 +2,10 @@ stages:
   - test
   - build
 
-test-job:
-  stage: test
-  script:
-    - echo "Testing the project..."
-  rules:
-    - changes:
-        - download-s3/**/*
-  only:
-    - main
-
 test-download-s3:
   stage: test
   script:
-    - echo "Testing the project..."
+    - echo "Testing download-s3..."
   rules:
     - changes:
         - download-s3/**/*
@@ -25,6 +15,7 @@ test-download-s3:
 test-upload-s3:
   stage: test
   script:
+    - echo "Testing upload-s3..."
   rules:
     - changes:
         - download-s3/**/*
@@ -34,7 +25,7 @@ test-upload-s3:
 test-echo:
   stage: test
   script:
-    - echo "Testing the project..."
+    - echo "Testing echo..."
   rules:
     - changes:
         - download-s3/**/*
@@ -45,7 +36,7 @@ test-echo:
 test-linux-command:
   stage: test
   script:
-    - echo "Testing the project..."
+    - echo "Testing linux-command..."
   rules:
     - changes:
         - download-s3/**/*
@@ -56,7 +47,7 @@ test-linux-command:
 test-sidecar:
   stage: test
   script:
-    - echo "Testing the project..."
+    - echo "Testing sidecar..."
   rules:
     - changes:
         - download-s3/**/*
