@@ -5,17 +5,19 @@ spec:
     service:
       type: string
 
+---
+
+image: docker:latest
+
+services:
+  - docker:dind
+
 variables:
   DOCKER_DRIVER: overlay2 # Optimized storage driver for GitLab CI
   IMAGE_NAME: $DOCKER_USERNAME/$[[ inputs.image-prefix ]]-$[[ inputs.service ]]
 
 stages:
   - to_docker_hub
-
-image: docker:latest
-
-services:
-  - docker:dind
 
 before_script:
   - apt-get update && apt-get install -y tar
