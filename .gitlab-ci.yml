@@ -9,8 +9,7 @@ test-download-s3:
   rules:
     - changes:
         - download-s3/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 test-upload-s3:
   stage: test
@@ -19,8 +18,7 @@ test-upload-s3:
   rules:
     - changes:
         - download-s3/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 test-echo:
   stage: test
@@ -29,8 +27,7 @@ test-echo:
   rules:
     - changes:
         - download-s3/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 
 test-linux-command:
@@ -40,8 +37,7 @@ test-linux-command:
   rules:
     - changes:
         - download-s3/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 
 test-sidecar:
@@ -51,8 +47,7 @@ test-sidecar:
   rules:
     - changes:
         - download-s3/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 build-download-s3:
   stage: build
@@ -62,8 +57,7 @@ build-download-s3:
   rules:
     - changes:
         - download-s3/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 build-upload-s3:
   stage: build
@@ -73,8 +67,7 @@ build-upload-s3:
   rules:
     - changes:
         - upload-s3/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 build-echo:
   stage: build
@@ -84,8 +77,7 @@ build-echo:
   rules:
     - changes:
         - echo/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 
 build-linux-command:
@@ -96,8 +88,7 @@ build-linux-command:
   rules:
     - changes:
         - linux-command/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 
 build-sidecar:
@@ -108,5 +99,4 @@ build-sidecar:
   rules:
     - changes:
         - sidecar/**/*
-  only:
-    - main
+    - if: '$CI_COMMIT_BRANCH == "main"'
