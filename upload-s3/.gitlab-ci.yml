@@ -1,5 +1,5 @@
 include:
   - local: '.gitlab-ci-template.yml'
     inputs:
-      image-prefix: "taskmanager2000-agent"
-      service: "upload-s3"
+      image-prefix: 'taskmanager2000-agent'
+      service: 'upload-s3'

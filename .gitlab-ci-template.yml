@@ -25,12 +25,11 @@ before_script:
 build_and_push:
   stage: to_docker_hub
   script:
-    - |
-      echo "Building $[[ inputs.service ]]...";
-      cd $[[ inputs.service ]];
-      tar -czh . | docker build - -t $IMAGE_NAME:latest;
-      docker tag $IMAGE_NAME:latest $IMAGE_NAME:$CI_COMMIT_SHORT_SHA;
-      echo "Pushing $[[ inputs.service ]]...";
-      docker push $IMAGE_NAME:latest;
-      docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA;
-      cd ..;
+    - echo "Building $[[ inputs.service ]]..."
+    - cd $[[ inputs.service ]]
+    - tar -czh . | docker build - -t $IMAGE_NAME:latest
+    - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - echo "Pushing $[[ inputs.service ]]..."
+    - docker push $IMAGE_NAME:latest
+    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - cd ..
