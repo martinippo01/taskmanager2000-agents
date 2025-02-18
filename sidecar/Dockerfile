@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 8500
 
 # Command to run the application
-CMD ["python", "sidecar.py"]
+CMD ["python", "communication.py"]
