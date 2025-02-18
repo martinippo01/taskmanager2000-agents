@@ -12,6 +12,7 @@ def post_with_retry(url, payload, headers, max_retries=10, retry_delay=5):
                 return response.json() 
             else:
                 logging.info(f'Request failed with status code {response.status_code} on attempt {attempt}.')
+                logging.info(f'Response: {response.text}')
                 if attempt < max_retries:
                     logging.info(f'Retrying in {retry_delay} seconds...')
                     time.sleep(retry_delay)

@@ -78,7 +78,7 @@ producer = KafkaProducer(
 
 
 kafka_info = {
-    "broker": KAFKA_BROKERS_FROM_SCHEDULER,
+    "brokers": KAFKA_BROKERS_FROM_SCHEDULER,
     "topic": KAFKA_AGENT_TOPIC,
     "username": USERNAME,
     "password": PASSWORD
