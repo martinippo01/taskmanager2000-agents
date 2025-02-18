@@ -34,7 +34,7 @@ def prepare_post(url, param_names, param_types, param_optionals, kafka_info):
         "params": {param: param_type for param, param_type in zip(param_names, param_types)},
         "optionalParams": param_optionals
     }
-    logging.log(json.dumps(payload, indent=4))
+    logging.info(json.dumps(payload, indent=4))
     headers = {
         'Content-Type': 'application/json',
     }
