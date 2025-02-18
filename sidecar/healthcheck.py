@@ -12,5 +12,5 @@ def health_check():
 
 
 def start_fastapi():
-    portForHealthcheck = os.getenv("HEALTHCHECK_PORT", 8500)
+    portForHealthcheck = int(os.getenv("HEALTHCHECK_PORT", '8500'))
     uvicorn.run(app, host="0.0.0.0", port=portForHealthcheck)
