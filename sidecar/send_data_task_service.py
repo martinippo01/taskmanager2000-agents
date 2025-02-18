@@ -7,8 +7,9 @@ def post_with_retry(url, payload, headers, max_retries=10, retry_delay=5):
     for attempt in range(1, max_retries + 1):
         try:
             response = requests.post(url, json=payload, headers=headers) 
+            status_code_str = str(response.status_code)
 
-            if response.status_code == 200:
+            if status_code_str.startswith('2'):
                 return response.json() 
             else:
                 logging.info(f'Request failed with status code {response.status_code} on attempt {attempt}.')
