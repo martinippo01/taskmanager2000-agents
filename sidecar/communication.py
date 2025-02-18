@@ -14,8 +14,8 @@ logging.basicConfig(
     ]
 )
 
-from sidecar.healthcheck import start_fastapi
-from sidecar.send_data_task_service import prepare_post
+from healthcheck import start_fastapi
+from send_data_task_service import prepare_post
 
 # Creo que quizás hace falta ponerle una config al logger
 logging.info("Empezando el sidecar!")
