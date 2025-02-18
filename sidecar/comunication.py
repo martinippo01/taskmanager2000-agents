@@ -37,7 +37,7 @@ PARAM_NAMES = os.getenv("PARAM_NAMES", "").split(",") if os.getenv("PARAM_NAMES"
 PARAM_TYPES = os.getenv("PARAM_TYPES", "").split(",") if os.getenv("PARAM_TYPES") else []
 PARAM_OPTIONALS = os.getenv("PARAM_OPTIONALS", "").split(",") if os.getenv("PARAM_OPTIONALS") else []
 
-NFS_PATH = os.getenv("NFS_PATH", ".")
+NFS_PATH = os.getenv("NFS_PATH", "/answers")
 
 
 logging.info("NFS: {NFS_PATH}")
