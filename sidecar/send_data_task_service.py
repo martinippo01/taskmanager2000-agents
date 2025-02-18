@@ -1,4 +1,4 @@
-from fastapi import requests
+import requests 
 import time
 import logging
 import json
@@ -6,7 +6,7 @@ import json
 def post_with_retry(url, payload, headers, max_retries=10, retry_delay=5):
     for attempt in range(1, max_retries + 1):
         try:
-            response = requests.post(url, json=payload, headers=headers)
+            response = requests.post(url, json=payload, headers=headers) 
 
             if response.status_code == 200:
                 return response.json() 
@@ -27,7 +27,6 @@ def post_with_retry(url, payload, headers, max_retries=10, retry_delay=5):
                 logging.error('Max retry attempts reached. Giving up.')
     return None
 
-
 def prepare_post(url, param_names, param_types, param_optionals, kafka_info):
     payload = {
         "kafkaData": kafka_info,
@@ -39,4 +38,3 @@ def prepare_post(url, param_names, param_types, param_optionals, kafka_info):
         'Content-Type': 'application/json',
     }
     return post_with_retry(url, payload, headers, 10, 3)
-    
