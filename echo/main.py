@@ -9,11 +9,11 @@ def echo(input_string):
     print(input_string)
 
 class EchoRequest(BaseModel):
-    input: str
+    inputs: dict
 
 @app.post("/echo")
 def echo_endpoint(request: EchoRequest):
-    msg = request.input
+    msg = request.inputs.get("input")
     if not msg:
         msg = "Nothing to echo"
     echo(msg)

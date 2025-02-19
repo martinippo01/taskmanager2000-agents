@@ -137,7 +137,7 @@ for message in consumer:
         # response debe tener un campo llamado "outcome"
         path_save_in_nfs = f"{NFS_PATH}/{workflow_execution_id}/{name}"
         response_json = response.json()
-        save_to_nfs(response_json.get("outcome", ""), path_save_in_nfs)
+        save_to_nfs(response_json.get("outcome", "Ups!"), path_save_in_nfs)
         send_response_to_kafka(workflow_execution_id, path_save_in_nfs)
     except Exception as e:
-        logging.error("Failed to process message: {e}")
+        logging.error(f"Failed to process message: {e}")

@@ -6,13 +6,14 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class CommandRequest(BaseModel):
-    command: str
+    inputs: dict
 
 @app.post("/execute")
 def execute_command(request: CommandRequest):
     try:
+        command = request.inputs.get("command")
         result = subprocess.run(
-            request.command, shell=True, capture_output=True, text=True
+            command, shell=True, capture_output=True, text=True
         )
         return {"outcome": result.stdout, "stderr": result.stderr, "exit_code": result.returncode}
     except Exception as e:

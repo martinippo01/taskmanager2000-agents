@@ -25,6 +25,7 @@ s3_client = boto3.client(
     region_name=AWS_REGION
 )
 
+# TODO: Hacer que le llegue un request que sea con inputs: {} que tenga la porquería en base64 
 @app.post("/upload")
 async def upload_file_to_s3(file: UploadFile = File(...)):
     try:
