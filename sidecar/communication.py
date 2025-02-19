@@ -1,7 +1,7 @@
 # Configuration
 import os
 import threading
-from fastapi import requests # quizas esto deba ser import requests
+import requests
 from kafka import KafkaConsumer, KafkaProducer
 import logging
 import json
@@ -40,7 +40,7 @@ PARAM_OPTIONALS = os.getenv("PARAM_OPTIONALS", "").split(",") if os.getenv("PARA
 NFS_PATH = os.getenv("NFS_PATH", "/answers")
 
 
-logging.info("NFS: {NFS_PATH}")
+logging.info(f"NFS: {NFS_PATH}")
 logging.info(f"Using TOPIC: {KAFKA_AGENT_TOPIC}, Kafka To Get Steps From Scheduler: {KAFKA_BROKERS_FROM_SCHEDULER}, Agent URL: {AGENT_URL}")
 logging.info(f"For Kafka Producer (to Orquestador): {KAFKA_BROKERS_TO_ORQUESTADOR}, Using Topic: {KAFKA_RESPONSE_TOPIC}")
 logging.info(f"Task Service URL: {TASK_SERVICE_URL}, Task name: {TASK_NAME}, Param names: {PARAM_NAMES}, Param types: {PARAM_TYPES}, Param optionals: {PARAM_OPTIONALS}")
