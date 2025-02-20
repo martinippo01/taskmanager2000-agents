@@ -4,7 +4,8 @@ import boto3
 import logging
 import mimetypes
 import base64
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
+import requests
 from botocore.exceptions import NoCredentialsError, ClientError
 
 app = FastAPI()
@@ -21,27 +22,29 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 
 @app.post("/download")
-async def download_file_from_s3(request: Request):
+async def download_file_from_s3(request):
     try:
         # Parse JSON request body
         body = await request.json()
         input_args = body.get("inputs", {})
 
         aws_bucket = input_args.get("aws_bucket")
-        aws_region = input_args.get("aws_region")
         file_name = input_args.get("file_name")
 
-        s3_client = boto3.client("s3", region_name=aws_region)
+        if not aws_bucket or not file_name:
+            raise HTTPException(status_code=400, detail="Missing 'aws_bucket' or 'file_name'")
 
-        # Extract file name
-        if not file_name:
-            raise HTTPException(status_code=400, detail="Missing 'file_name' in inputArgs")
+        # Construct the public URL
+        file_url = f"https://{aws_bucket}.s3.amazonaws.com/{file_name}"
 
-        logging.info(f"Fetching file '{file_name}' from S3 bucket '{aws_bucket}'.")
+        logging.info(f"Fetching public file from {file_url}")
 
-        # Fetch the file from S3
-        file_obj = s3_client.get_object(Bucket=aws_bucket, Key=file_name)
-        file_content = file_obj["Body"].read()
+        # Fetch the file from S3 using HTTP GET
+        response = requests.get(file_url)
+        if response.status_code != 200:
+            raise HTTPException(status_code=404, detail="File not found or access denied")
+
+        file_content = response.content
 
         # Encode file content as Base64
         base64_encoded = base64.b64encode(file_content).decode("utf-8")
@@ -54,18 +57,6 @@ async def download_file_from_s3(request: Request):
             "file_name": file_name,
             "mime_type": mimetypes.guess_type(file_name)[0] or "application/octet-stream"
         }
-
-    except NoCredentialsError:
-        logging.error("AWS credentials not found.")
-        raise HTTPException(status_code=500, detail="AWS credentials not found")
-
-    except ClientError as e:
-        if e.response["Error"]["Code"] == "NoSuchKey":
-            logging.error(f"File '{file_name}' not found in S3.")
-            raise HTTPException(status_code=404, detail="File not found in S3")
-        else:
-            logging.error(f"AWS ClientError: {str(e)}")
-            raise HTTPException(status_code=500, detail="Error retrieving file from S3")
 
     except Exception as e:
         logging.error(f"Unexpected error: {str(e)}")
