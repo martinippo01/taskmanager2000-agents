@@ -22,11 +22,9 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 
 @app.post("/download")
-async def download_file_from_s3(request):
+async def download_file_from_s3(request: dict):
     try:
-        # Parse JSON request body
-        body = await request.json()
-        input_args = body.get("inputs", {})
+        input_args = request.get("inputs", {})
 
         aws_bucket = input_args.get("aws_bucket")
         file_name = input_args.get("file_name")
