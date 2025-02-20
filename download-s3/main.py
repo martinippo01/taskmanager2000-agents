@@ -10,18 +10,13 @@ from botocore.exceptions import NoCredentialsError, ClientError
 app = FastAPI()
 
 # S3 Configuration
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
-AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY")
-AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
-AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+#AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
+#AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY")
+#AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+#AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 
 # Initialize S3 client
-s3_client = boto3.client(
-    "s3",
-    aws_access_key_id=AWS_ACCESS_KEY,
-    aws_secret_access_key=AWS_SECRET_KEY,
-    region_name=AWS_REGION
-)
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -32,15 +27,23 @@ async def download_file_from_s3(request: Request):
         body = await request.json()
         input_args = body.get("inputs", {})
 
-        # Extract file name
+        aws_bucket = input_args.get("aws_bucket")
+        aws_region = input_args.get("aws_region")
+        aws_access_key = input_args.get("aws_access_key")
+        aws_secret_key = input_args.get("aws_secret_key")
         file_name = input_args.get("file_name")
+
+        s3_client = boto3.client("s3", aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key, region_name=aws_region)
+
+        # Extract file name
+        
         if not file_name:
             raise HTTPException(status_code=400, detail="Missing 'file_name' in inputArgs")
 
-        logging.info(f"Fetching file '{file_name}' from S3 bucket '{AWS_BUCKET_NAME}'.")
+        logging.info(f"Fetching file '{file_name}' from S3 bucket '{aws_bucket}'.")
 
         # Fetch the file from S3
-        file_obj = s3_client.get_object(Bucket=AWS_BUCKET_NAME, Key=file_name)
+        file_obj = s3_client.get_object(Bucket=aws_bucket, Key=file_name)
         file_content = file_obj["Body"].read()
 
         # Encode file content as Base64

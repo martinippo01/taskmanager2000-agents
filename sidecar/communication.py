@@ -95,10 +95,13 @@ def save_to_nfs(message, path_to_nfs: str):
         # Esto crea el directorio si no existe
         os.makedirs(os.path.dirname(path_to_nfs), exist_ok=True)
 
-        with open(path_to_nfs, "a") as file:
-            file.write(f"{message}\n")
-
-        logging.info(f"Message successfully saved to NFS: {path_to_nfs}")
+        # Check if the file already exists
+        if not os.path.exists(path_to_nfs):
+            with open(path_to_nfs, "w") as file:
+                file.write(f"{message}")
+            logging.info(f"Message successfully saved to NFS: {path_to_nfs}")
+        else:
+            logging.info(f"File already exists, not writing to NFS: {path_to_nfs}")
     except Exception as e:
         logging.error(f"Failed to write to NFS: {e}")
 
