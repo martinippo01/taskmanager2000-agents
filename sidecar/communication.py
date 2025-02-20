@@ -100,10 +100,13 @@ def save_to_nfs(message, path_to_nfs: str):
             with open(path_to_nfs, "w") as file:
                 file.write(f"{message}")
             logging.info(f"Message successfully saved to NFS: {path_to_nfs}")
+            return True
         else:
             logging.info(f"File already exists, not writing to NFS: {path_to_nfs}")
+            return False
     except Exception as e:
         logging.error(f"Failed to write to NFS: {e}")
+        return False
 
 # En where_to_look se va a cargar el path al nfs
 def send_response_to_kafka(execId: str, where_to_look: str, name: str):
@@ -140,7 +143,8 @@ for message in consumer:
         # response debe tener un campo llamado "outcome"
         path_save_in_nfs = f"{NFS_PATH}/{workflow_execution_id}/{name}"
         response_json = response.json()
-        save_to_nfs(response_json.get("outcome", "Ups!"), path_save_in_nfs)
-        send_response_to_kafka(workflow_execution_id, path_save_in_nfs, name)
+        saved = save_to_nfs(response_json.get("outcome", "Ups!"), path_save_in_nfs)
+        if saved:
+            send_response_to_kafka(workflow_execution_id, path_save_in_nfs, name)
     except Exception as e:
         logging.error(f"Failed to process message: {e}")
