@@ -103,11 +103,11 @@ def save_to_nfs(message, path_to_nfs: str):
         logging.error(f"Failed to write to NFS: {e}")
 
 # En where_to_look se va a cargar el path al nfs
-def send_response_to_kafka(execId: str, where_to_look: str):
+def send_response_to_kafka(execId: str, where_to_look: str, name: str):
     try:
         producer.send(
             KAFKA_RESPONSE_TOPIC,  
-            {"executionId": execId, "answer": where_to_look}  
+            {"executionId": execId, "answer": where_to_look, "name": name}  
         )
         logging.info(f"Successfully sent response to Kafka topic: {KAFKA_RESPONSE_TOPIC}")
         
@@ -138,6 +138,6 @@ for message in consumer:
         path_save_in_nfs = f"{NFS_PATH}/{workflow_execution_id}/{name}"
         response_json = response.json()
         save_to_nfs(response_json.get("outcome", "Ups!"), path_save_in_nfs)
-        send_response_to_kafka(workflow_execution_id, path_save_in_nfs)
+        send_response_to_kafka(workflow_execution_id, path_save_in_nfs, name)
     except Exception as e:
         logging.error(f"Failed to process message: {e}")
