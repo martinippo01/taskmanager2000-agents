@@ -29,14 +29,11 @@ async def download_file_from_s3(request: Request):
 
         aws_bucket = input_args.get("aws_bucket")
         aws_region = input_args.get("aws_region")
-        aws_access_key = input_args.get("aws_access_key")
-        aws_secret_key = input_args.get("aws_secret_key")
         file_name = input_args.get("file_name")
 
-        s3_client = boto3.client("s3", aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key, region_name=aws_region)
+        s3_client = boto3.client("s3", region_name=aws_region)
 
         # Extract file name
-        
         if not file_name:
             raise HTTPException(status_code=400, detail="Missing 'file_name' in inputArgs")
 
